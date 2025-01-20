@@ -266,10 +266,12 @@ Your favorite books (in no particular order)
 
 
   <h4>Anchor tag</h4>
-Please
-
+Please {""}
 <a href="https://www.lipsum.com" id="wd-github">click here</a>
-to get dummy text<br/>
+{""} to get dummy text<br/>
+
+<a href="https://github.com/dewikalis/kambaz-react-web-app" id="wd-github">Click here</a> 
+{""} for my Github<br/>
 </div>
 
 
