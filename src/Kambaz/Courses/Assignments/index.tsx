@@ -18,17 +18,20 @@ export default function Assignments() {
       <AssignmentsControls />
       <br /><br /><br /><br />
 
+      <div className="wd-title p-3 ps-2 bg-secondary">
+        <BsGripVertical className="me-2 fs-3" /> <IoCaretDown /> ASSIGNMENTS <AssignmentsControlButtons />
+      </div>
+
       <ListGroup className="rounded-0" id="wd-modules">
         {assignments
           .filter((assignment: any) => assignment.course === cid)
           .map((assignment: any) => (
-            <ListGroup.Item key={assignment.id} className="wd-module p-0 mb-5 fs-5 border-gray">
-              <div className="wd-title p-3 ps-2 bg-secondary">
-                <BsGripVertical className="me-2 fs-3" /> <IoCaretDown /> ASSIGNMENTS <AssignmentsControlButtons />
-              </div>
-
-              <ListGroup className="wd-lessons rounded-0">
-                <ListGroup.Item className="wd-lesson p-3 ps-1 d-flex align-items-center">
+            <ListGroup.Item 
+              key={assignment.id} 
+              className="wd-module p-0 mb-0 fs-6" 
+            >
+              <ListGroup className="wd-lessons rounded-0 mb-0"> 
+                <ListGroup.Item className="wd-lesson p-3 ps-1 d-flex align-items-center mb-0"> 
                   <BsGripVertical className="me-2 fs-3" /> <LuNewspaper className="me-2 fs-3" color="green" />
                   <div className="wd-assignment-text ms-2">
                     <Link
