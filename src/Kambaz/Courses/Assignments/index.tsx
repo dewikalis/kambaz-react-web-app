@@ -3,7 +3,6 @@ import { BsGripVertical } from "react-icons/bs";
 import { LuNewspaper } from "react-icons/lu";
 import { IoCaretDown } from "react-icons/io5";
 import { Link, useParams } from "react-router-dom";
-import * as db from "../../Database";
 import AssignmentsControls from "./AssignmentsControl";
 import { useDispatch, useSelector } from "react-redux";
 import { FaTrash } from "react-icons/fa";

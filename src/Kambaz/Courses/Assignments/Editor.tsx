@@ -1,20 +1,17 @@
 import { Button, Form } from "react-bootstrap";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid"; // For creating new assignments
-import * as db from "../../Database"; // Assuming this is your database
-import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateAssignment, addAssignment } from "./reducer";
 
 export default function AssignmentEditor() {
   const dispatch = useDispatch();
-  const { aid, cid } = useParams(); // Get the course ID (cid) and assignment ID (aid) from URL
+  const { aid, cid } = useParams(); 
 
   const { assignments } = useSelector((state: any) => state.assignmentReducer);
   let currentAssignment = assignments.find((assignment: any) => assignment._id === aid);
   const [assignment, setAssignment] = useState<any>(currentAssignment);
   
-  // Using destructuring to extract individual fields
   const assignmentName = assignment?.title || "";
   const description = assignment?.description || "";
   const points = assignment?.points || 100;
