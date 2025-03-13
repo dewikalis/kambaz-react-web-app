@@ -56,11 +56,14 @@ export default function Assignments() {
                     </span>
                     <span className="d-block"> <b>Due </b> {assignment.due} | {assignment.points}pts</span>
                   </div>
-                  <FaTrash
-                    className="text-danger me-2 mb-1"
-                    cursor={"pointer"}
-                    onClick={() => handleDelete(assignment._id)}
-                  />
+                   {/* Conditionally render the trash icon only for faculty */}
+      {isFaculty && (
+        <FaTrash
+          className="text-danger me-2 mb-1"
+          cursor={"pointer"}
+          onClick={() => handleDelete(assignment._id)}
+        />
+      )}
                 </ListGroup.Item>
               </ListGroup>
             </ListGroup.Item>
