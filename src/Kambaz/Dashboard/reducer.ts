@@ -22,10 +22,13 @@ const enrollmentSlice = createSlice({
     },
     toggleShowAllEnrollments: (state) => {
       state.showAllEnrollments = !state.showAllEnrollments
+    },
+    setEnrollments: (state, action: PayloadAction<any>) => {
+      state.enrollments = action.payload
     }
   },
 });
 
-export const { toggleEnrollment, toggleShowAllEnrollments } = enrollmentSlice.actions;
+export const { toggleEnrollment, toggleShowAllEnrollments, setEnrollments } = enrollmentSlice.actions;
 
 export default enrollmentSlice.reducer;

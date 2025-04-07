@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateAssignment, addAssignment } from "./reducer";
+import * as client from "./Client";
+
 
 export default function AssignmentEditor() {
   const dispatch = useDispatch();
@@ -86,17 +88,19 @@ export default function AssignmentEditor() {
         </Link>
         
         <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
-          <Button
-            className="float-end"
-            variant="danger"
-            onClick={() => {
-              if (currentAssignment) {
-                dispatch(updateAssignment({ ...assignment, course: cid }));
-              } else {
-                dispatch(addAssignment({ ...assignment, course: cid }));
-              }
-            }}
-          >
+        <Button
+              className="float-end"
+              variant="danger"
+              onClick={async () => {
+                if (currentAssignment) {
+                  await client.updateAssignment({ ...assignment, course: cid });
+                  dispatch(updateAssignment({ ...assignment, course: cid }));
+                } else {
+                  await client.addAssignment({ ...assignment, course: cid });
+                  dispatch(addAssignment({ ...assignment, course: cid }));
+                }
+              }}
+            >
             Save
           </Button>
         </Link>

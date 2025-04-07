@@ -1,4 +1,4 @@
-import { ListGroup } from "react-bootstrap";
+import { Button, ListGroup, Modal } from "react-bootstrap";
 import { BsGripVertical } from "react-icons/bs";
 import { LuNewspaper } from "react-icons/lu";
 import { IoCaretDown } from "react-icons/io5";
@@ -6,7 +6,10 @@ import { Link, useParams } from "react-router-dom";
 import AssignmentsControls from "./AssignmentsControl";
 import { useDispatch, useSelector } from "react-redux";
 import { FaTrash } from "react-icons/fa";
-import { deleteAssignment } from "./reducer";
+import { deleteAssignment, setAssignments } from "./reducer";
+import * as assignmentClient from "./Client"
+import { useState, useEffect } from "react";
+
 
 export default function Assignments() {
   const dispatch = useDispatch();
@@ -14,13 +17,34 @@ export default function Assignments() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { assignments } = useSelector((state: any) => state.assignmentReducer);
   const isFaculty = currentUser.role === "FACULTY";  // Adding the isFaculty check
+  
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
 
-  const handleDelete = (assignmentId: string) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this assignment?");
-    if (confirmDelete) {
-      dispatch(deleteAssignment(assignmentId));
-    }
+  const fetchAssignments = async () => {
+    if (!cid) return
+    const assignments = await assignmentClient.findAssignmentsForCourse(cid);
+    dispatch(setAssignments(assignments));
   };
+
+  const handleDelete = (assignment: any) => {
+    setSelectedAssignment(assignment);
+    setShowDeleteDialog(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (selectedAssignment) {
+      await assignmentClient.deleteAssignment(selectedAssignment._id);
+      dispatch(deleteAssignment(selectedAssignment._id));
+    }
+    setShowDeleteDialog(false);
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteDialog(false);
+  };
+
+  useEffect(() => { fetchAssignments() }, [])
 
   return (
     <div>
@@ -69,6 +93,25 @@ export default function Assignments() {
             </ListGroup.Item>
           ))}
       </ListGroup>
+      
+      <Modal show={showDeleteDialog} onHide={handleDeleteCancel} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete{" "}
+          <strong>{selectedAssignment?.title}</strong>? This action cannot be
+          undone.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleDeleteCancel}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDeleteConfirm}>
+            Yes, Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
