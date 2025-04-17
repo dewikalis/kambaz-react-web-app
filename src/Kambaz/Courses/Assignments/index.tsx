@@ -7,24 +7,23 @@ import AssignmentsControls from "./AssignmentsControl";
 import { useDispatch, useSelector } from "react-redux";
 import { FaTrash } from "react-icons/fa";
 import { deleteAssignment, setAssignments } from "./reducer";
-import * as assignmentClient from "./Client"
+import * as assignmentClient from "./Client";
 import { useState, useEffect } from "react";
-
 
 export default function Assignments() {
   const dispatch = useDispatch();
   const { cid } = useParams();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { assignments } = useSelector((state: any) => state.assignmentReducer);
-  const isFaculty = currentUser.role === "FACULTY";  // Adding the isFaculty check
-  
+  const isFaculty = currentUser?.role === "FACULTY";  // Adding the isFaculty check
+
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
 
   const fetchAssignments = async () => {
-    if (!cid) return
-    const assignments = await assignmentClient.findAssignmentsForCourse(cid);
-    dispatch(setAssignments(assignments));
+    if (!cid) return;
+    const fetchedAssignments = await assignmentClient.findAssignmentsForCourse(cid);
+    dispatch(setAssignments(fetchedAssignments));
   };
 
   const handleDelete = (assignment: any) => {
@@ -44,7 +43,9 @@ export default function Assignments() {
     setShowDeleteDialog(false);
   };
 
-  useEffect(() => { fetchAssignments() }, [])
+  useEffect(() => {
+    fetchAssignments();
+  }, [cid]);
 
   return (
     <div>
@@ -80,20 +81,20 @@ export default function Assignments() {
                     </span>
                     <span className="d-block"> <b>Due </b> {assignment.due} | {assignment.points}pts</span>
                   </div>
-                   {/* Conditionally render the trash icon only for faculty */}
-      {isFaculty && (
-        <FaTrash
-          className="text-danger me-2 mb-1"
-          cursor={"pointer"}
-          onClick={() => handleDelete(assignment._id)}
-        />
-      )}
+                  {/* Conditionally render the trash icon only for faculty */}
+                  {isFaculty && (
+                    <FaTrash
+                      className="text-danger me-2 mb-1"
+                      cursor={"pointer"}
+                      onClick={() => handleDelete(assignment)}
+                    />
+                  )}
                 </ListGroup.Item>
               </ListGroup>
             </ListGroup.Item>
           ))}
       </ListGroup>
-      
+
       <Modal show={showDeleteDialog} onHide={handleDeleteCancel} centered>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Deletion</Modal.Title>

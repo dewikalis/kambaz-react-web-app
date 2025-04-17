@@ -1,94 +1,215 @@
-import { Button, Form } from "react-bootstrap";
-import { useParams, Link } from "react-router-dom";
-import { useState } from "react";
+import {
+  Button,
+  Col,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormSelect,
+  Row,
+} from "react-bootstrap";
+import { Link, useParams } from "react-router";
+import { addAssignment, updateAssignment } from "./reducer";
 import { useDispatch, useSelector } from "react-redux";
-import { updateAssignment, addAssignment } from "./reducer";
+import { useState } from "react";
 import * as client from "./Client";
-
 
 export default function AssignmentEditor() {
   const dispatch = useDispatch();
-  const { aid, cid } = useParams(); 
-
+  const { cid, aid } = useParams();
   const { assignments } = useSelector((state: any) => state.assignmentReducer);
-  let currentAssignment = assignments.find((assignment: any) => assignment._id === aid);
+  const currentAssignment = assignments.find(
+    (assignment: any) => assignment._id === aid
+  );
   const [assignment, setAssignment] = useState<any>(currentAssignment);
-  
-  const assignmentName = assignment?.title || "";
-  const description = assignment?.description || "";
+  const title = assignment?.title || "";
+  const desciption = assignment?.description || "";
   const points = assignment?.points || 100;
-  const dueDate = assignment?.due || "";
-  const availableDate = assignment?.from || "";
-  const untilDate = assignment?.until || "";
+  const due = assignment?.due || "";
+  const from = assignment?.from || "";
+  const until = assignment?.until || "";
 
   return (
     <div id="wd-assignments-editor">
-      <h3>{aid ? "Edit Assignment" : "Add New Assignment"}</h3>
-      <Form>
-        <Form.Group className="mb-3" controlId="wd-name">
-          <Form.Label>Assignment Name</Form.Label>
-          <Form.Control
+      <FormGroup className="mb-3" controlId="wd-email">
+        <FormLabel>Assignment Name</FormLabel>
+        <FormControl
+          type="text"
+          placeholder="New Assignment"
+          value={title}
+          onChange={(e) =>
+            setAssignment((prev: any) => ({ ...prev, title: e.target.value }))
+          }
+        />
+        <br />
+        <FormControl
+          as="textarea"
+          rows={10}
+          value={desciption}
+          onChange={(e) =>
+            setAssignment((prev: any) => ({
+              ...prev,
+              description: e.target.value,
+            }))
+          }
+        />
+      </FormGroup>
+      <FormGroup as={Row}>
+        <Col>
+          <FormLabel>Points</FormLabel>
+        </Col>
+        <Col xs={9}>
+          <FormControl
             type="text"
-            value={assignmentName}
-            onChange={(e) => setAssignment((prev: any) => ({ ...prev, title: e.target.value }))}
-            placeholder="Enter assignment name"
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="wd-description">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={3}
-            value={description}
-            onChange={(e) => setAssignment((prev: any) => ({ ...prev, description: e.target.value }))}
-            placeholder="Enter assignment description"
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="wd-points">
-          <Form.Label>Points</Form.Label>
-          <Form.Control
-            type="number"
             value={points}
-            onChange={(e) => setAssignment((prev: any) => ({ ...prev, points: e.target.value }))}
-            placeholder="Enter points"
+            onChange={(e) =>
+              setAssignment((prev: any) => ({
+                ...prev,
+                points: e.target.value,
+              }))
+            }
           />
-        </Form.Group>
+        </Col>
+      </FormGroup>
+      <FormGroup as={Row}>
+        <Col>
+          <FormLabel>Assignments</FormLabel>
+        </Col>
+        <Col xs={9}>
+          <FormSelect aria-label="Assignment Groups">
+            <option value="ASSIGNMENT1">Assignment1</option>
+            <option value="ASSIGNMENT2">Assignment2</option>
+            <option value="ASSIGNMENT3">Assignment3</option>
+          </FormSelect>
+        </Col>
+      </FormGroup>
 
-        <Form.Group className="mb-3" controlId="wd-due">
-          <Form.Label>Due Date</Form.Label>
-          <Form.Control
-            type="date"
-            value={dueDate}
-            onChange={(e) => setAssignment((prev: any) => ({ ...prev, due: e.target.value }))}
-          />
-        </Form.Group>
+      <FormGroup as={Row}>
+        <Col>
+          <FormLabel>Display Grade as</FormLabel>
+        </Col>
+        <Col xs={9}>
+          <FormSelect aria-label="Display Grade as">
+            <option value="Percentage">Percentage</option>
+            <option value="four-point">Four Point</option>
+            <option value="Letter">Letter</option>
+          </FormSelect>
+        </Col>
+      </FormGroup>
 
-        <Form.Group className="mb-3" controlId="wd-available">
-          <Form.Label>Available From</Form.Label>
-          <Form.Control
-            type="date"
-            value={availableDate}
-            onChange={(e) => setAssignment((prev: any) => ({ ...prev, from: e.target.value }))}
-          />
-        </Form.Group>
+      <FormGroup as={Row}>
+        <Col>
+          <FormLabel>Submission Type</FormLabel>
+        </Col>
+        <Col xs={9}>
+          <div className="p-3 border-black border border-light-subtle">
+            <FormSelect aria-label="Submission Type">
+              <option value="Online">Online</option>
+              <option value="Physical">Physical</option>
+            </FormSelect>
+            <form>
+              <input
+                type="checkbox"
+                className="m-2"
+                id="textEntry"
+                name="textEntry"
+              />
+              <label htmlFor="textEntry">Text Entry</label>
+              <br />
+              <input
+                type="checkbox"
+                className="m-2"
+                id="websiteUrl"
+                name="websiteUrl"
+              />
+              <label htmlFor="websiteUrl">Website URL</label>
+              <br />
+              <input
+                type="checkbox"
+                className="m-2"
+                id="mediaRecordings"
+                name="mediaRecordings"
+              />
+              <label htmlFor="mediaRecordings">Media Recordings</label>
+              <br />
+              <input
+                type="checkbox"
+                className="m-2"
+                id="studentAnnotation"
+                name="studentAnnotation"
+              />
+              <label htmlFor="studentAnnotation">Student Annotation</label>
+              <br />
+              <input
+                type="checkbox"
+                className="m-2"
+                id="fileUploads"
+                name="fileUploads"
+              />
+              <label htmlFor="fileUploads">File Uploads</label>
+              <br />
+            </form>
+          </div>
+        </Col>
+      </FormGroup>
 
-        <Form.Group className="mb-3" controlId="wd-available">
-          <Form.Label>Available Until</Form.Label>
-          <Form.Control
-            type="date"
-            value={untilDate}
-            onChange={(e) => setAssignment((prev: any) => ({ ...prev, from: e.target.value }))}
-          />
-        </Form.Group>
-
-        <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
-          <Button className="float-end" variant="secondary">Cancel</Button>
-        </Link>
-        
-        <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
-        <Button
+      <FormGroup as={Row}>
+        <Col>
+          <FormLabel>Assign</FormLabel>
+        </Col>
+        <Col xs={9}>
+          <div className="p-3 border-black border border-light-subtle">
+            <FormLabel>Assign to</FormLabel>
+            <FormControl type="text" />
+            <FormLabel>Due</FormLabel>
+            <FormControl
+              type="date"
+              name="duedate"
+              value={due}
+              onChange={(e) =>
+                setAssignment((prev: any) => ({ ...prev, due: e.target.value }))
+              }
+            />
+            <Row>
+              <Col>
+                <FormLabel>Available from</FormLabel>
+                <FormControl
+                  type="date"
+                  name="duedate"
+                  value={from}
+                  onChange={(e) =>
+                    setAssignment((prev: any) => ({
+                      ...prev,
+                      from: e.target.value,
+                    }))
+                  }
+                />
+              </Col>
+              <Col>
+                <FormLabel>Until</FormLabel>
+                <FormControl
+                  type="date"
+                  name="duedate"
+                  value={until}
+                  onChange={(e) =>
+                    setAssignment((prev: any) => ({
+                      ...prev,
+                      until: e.target.value,
+                    }))
+                  }
+                />
+              </Col>
+            </Row>
+          </div>
+        </Col>
+        <hr />
+        <Col>
+          <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
+            <Button className="float-end" variant="secondary">
+              Cancel
+            </Button>
+          </Link>
+          <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
+            <Button
               className="float-end"
               variant="danger"
               onClick={async () => {
@@ -101,10 +222,11 @@ export default function AssignmentEditor() {
                 }
               }}
             >
-            Save
-          </Button>
-        </Link>
-      </Form>
+              Save
+            </Button>
+          </Link>
+        </Col>
+      </FormGroup>
     </div>
   );
 }
