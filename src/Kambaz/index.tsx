@@ -68,8 +68,8 @@ export default function Kambaz() {
     endDate: "2023-12-15",
     description: "New Description",
   });
-  const addNewCourse = async () => {
-    const newCourse = await courseClient.createCourse(course);
+  const addCourse = async () => {
+    const newCourse = await courseClient.addCourse(course);
     setCourses([...courses, newCourse]);
   };
 
@@ -115,7 +115,7 @@ export default function Kambaz() {
                     courses={courses}
                     course={course}
                     setCourse={setCourse}
-                    addNewCourse={addNewCourse}
+                    addCourse={addCourse}
                     deleteCourse={deleteCourse}
                     updateCourse={updateCourse}
                     enrolling={enrolling}

@@ -10,7 +10,7 @@ export const findUsersForCourse = async (courseId: string) => {
   return response.data;
 };
 
-export const createCourse = async (course: any) => {
+export const addCourse = async (course: any) => {
   const { data } = await axiosWithCredentials.post(COURSES_API, course);
   return data;
 };

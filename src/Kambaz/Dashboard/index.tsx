@@ -6,7 +6,7 @@ export default function Dashboard({
   courses,
   course,
   setCourse,
-  addNewCourse,
+  addCourse,
   deleteCourse,
   updateCourse,
   enrolling,
@@ -16,7 +16,7 @@ export default function Dashboard({
   courses: any[];
   course: any;
   setCourse: (course: any) => void;
-  addNewCourse: () => void;
+  addCourse: () => void;
   deleteCourse: (course: any) => void;
   updateCourse: () => void;
   enrolling: boolean;
@@ -40,7 +40,7 @@ export default function Dashboard({
             <button
               className="btn btn-primary float-end"
               id="wd-add-new-course-click"
-              onClick={addNewCourse}
+              onClick={addCourse}
             >
               Add
             </button>

@@ -59,7 +59,7 @@ export default function AssignmentEditor() {
         </Col>
         <Col xs={9}>
           <FormControl
-            type="text"
+            type="number"
             value={points}
             onChange={(e) =>
               setAssignment((prev: any) => ({
